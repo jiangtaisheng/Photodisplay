@@ -27,11 +27,12 @@
 -(void)initScrollView{
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, screen_width, screen_height)];
+    self.scrollView.backgroundColor=[UIColor blackColor];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.userInteractionEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     
-    self.scrollView.contentSize = CGSizeMake(self.imgArr.count*screen_width, screen_height);
+    self.scrollView.contentSize = CGSizeMake(self.imgArr.count*(screen_width+20), screen_height);
     self.scrollView.delegate = self;
     self.scrollView.contentOffset = CGPointMake(0, 0);
   
@@ -68,7 +69,10 @@
     if ([imageView isKindOfClass:[PhotoImageView class]]) {
         
     }else{
-        CGRect frame = CGRectMake(page*_scrollView.frame.size.width, 0, self.view.frame.size.width, self.view.frame.size.height);
+        _scrollView.bounds = CGRectMake(0, 0, self.view.frame.size.width + 2 * 10,self.view.frame.size.height);
+        _scrollView.center = self.view.center;
+        
+        CGRect frame = CGRectMake(page*_scrollView.frame.size.width+10, 0, self.view.frame.size.width, self.view.frame.size.height);
 
         PhotoImageView * photoView=[[PhotoImageView alloc]initWithFrame:frame withphotoPath:self.imgArr[page]];
         photoView.delegate=self;
@@ -89,8 +93,10 @@
     [self loadPhoto:i-2];
     [self loadPhoto:i];
     self.currentIndex = i-1;
+    NSLog(@"-----%d",i-1);
     self.sliderLabel.text = [NSString stringWithFormat:@"%zd/%zd",self.currentIndex+1,(unsigned long)self.imgArr.count];
-
+    
+    self.scrollView.contentOffset=CGPointMake((i-1)*(self.view.frame.size.width+20), 0);
 }
 
 - (void)handleSingerTapHideView
